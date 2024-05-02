@@ -34,8 +34,33 @@ fn unload_goods(receiver: Receiver<Item>, warehouse: &mut Vec<Option<Item>>) {
 
 }
 
+fn receive_orders_to_check(){
+    // let received_orders = format!("{:?}", receiver::activate_receiver());
+
+    let received_orders = receiver::activate_receiver();
+
+    // for order in received_orders {
+    //     println!("Received order: {}", order)
+    // }
+
+    {// let parts: Vec<&str> = received_orders.split(",").collect();
+
+    // let product_id_str = parts[0].split_whitespace().nth(3).unwrap();
+    // let product_id: i32 = product_id_str.parse().unwrap();
+
+    // let customer_id_str = parts[1].split_whitespace().nth(2).unwrap();
+    // let customer_id: i32 = customer_id_str.parse().unwrap();
+
+    // let fulfilled_str = parts[2].split_whitespace().nth(1).unwrap();
+    // let fulfilled: bool = fulfilled_str.parse().unwrap();
+
+    //  // Print extracted data
+    //  println!("Product IDs: {}", product_id);
+}
+
+}
+
 pub fn inventory_management(){
-    // Create a channel to send incoming goods
     let (sender, receiver) = channel::<Item>();
 
     // Define warehouse storage (vector of Option<Item>)
@@ -49,12 +74,10 @@ pub fn inventory_management(){
         unload_goods(receiver, &mut warehouse)
     });
 
-    // Wait for all threads to finish
     receive_thread.join().unwrap();
     unload_thread.join().unwrap();
 
-    // listen to orders information
-    receiver::activate_receiver();
+    receive_orders_to_check();
 
-    println!("Inventory management simulation complete.");
+
 }

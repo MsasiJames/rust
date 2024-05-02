@@ -11,11 +11,20 @@ pub fn receiver() -> amiquip::Result<()>{
 
     let consumer = queue.consume(ConsumerOptions::default())?;
 
+    let mut counter = 0;
+
     loop {
+
+      if counter == 10 {
+        break;
+      }
+
       match consumer.receiver().recv() {
         Ok(ConsumerMessage::Delivery(delivery)) => {
           let body = String::from_utf8_lossy(&delivery.body);
-          println!("Received message with body {}", body);
+
+          println!("Received: {}", body);
+          counter += 1;
           consumer.ack(delivery).unwrap();
         }
         Ok(other) => {
@@ -32,6 +41,7 @@ pub fn receiver() -> amiquip::Result<()>{
     connection.close()
 }
 pub fn activate_receiver() {
+
     let receiver_handle = thread::spawn(|| {
         if let Err(err) = receiver() {
             eprintln!("Receiver thread error: {}", err);

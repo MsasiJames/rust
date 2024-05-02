@@ -49,7 +49,7 @@ fn process_orders(rx_orders: Receiver<Order>, tx_packing: Sender<Order>) -> thre
         match order.fulfilled {
             false => {
                 println!("Received order: {:?}", order);
-                sender::activate_sender(order.product_name.clone());    // sends order to inventory
+                sender::activate_sender(order.product_name.clone(), order.customer_id.clone(), order.fulfilled.clone(), 1);    // sends order to inventory
                 thread::sleep(std::time::Duration::from_secs(1));
             }
             true => {
